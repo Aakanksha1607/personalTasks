@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User Generator</title>
+    <style>
+       
+    body {
+        font-family:'Times New Roman', Times, serif;
+        background: linear-gradient(to right, #ddac43, #4eca40); 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    #user-container {
+        background-color: rgb(194, 237, 230);
+        border-radius: 40px;
+        padding: 20px;
+        width: 400px;
+        text-align: center;
+        box-shadow: 5px 5px 30px 4px rgb(10, 225, 214);
+    }
+
+    #user-info img {
+        border-radius: 50%;
+    }
+
+    #user-info {
+        margin-top: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #9000ff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+    h2 {
+        background:linear-gradient(25deg, #c60909, #1326d2 );
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        
+    }
+     p {
+        font-size: 20px;
+       
+    }
+</style>
+</head>
+<body>
+    <div id="user-container">
+       
+        <h1>Random User</h1>
+        <div id="user-info"></div>
+        <button id="load-user">Load Random User</button>
+    </div>
+
+    <script>
+    document.getElementById('load-user').addEventListener('click', fetchUserData);
+  function fetchUserData() {
+    const URL=('https://randomuser.me/api/')
+    fetch(URL).then(response => response.json())
+        .then(data => {
+            let user = data.results[0];
+            let userInfo= document.getElementById('user-info');
+            userInfo.innerHTML = '';
+
+            let userImage = document.createElement('img');
+            userImage.src = user.picture.large;
+            userImage.alt = "User Image";
+
+            let userName = document.createElement('h2');
+            userName.innerHTML = `${user.name.first} ${user.name.last}`;
+
+            let userEmail = document.createElement('p');
+            userEmail.innerHTML = `<b>Email:</b> ${user.email}`;
+
+            let userLocation = document.createElement('p');
+            userLocation.innerHTML = `<b>Location:</b> ${user.location.city}, ${user.location.country}`;
+
+            let userDOB = document.createElement('p')
+            userDOB.innerHTML = ` <b>Date of Birth:</b>${user.dob.date}`
+
+            let userPhone = document. createElement('p');
+            userPhone.innerHTML = `<b>Phone:</b>${user.phone}`
+
+            userInfo.appendChild(userImage);
+            userInfo.appendChild(userName);
+            userInfo.appendChild(userEmail);
+            userInfo.appendChild(userLocation);
+            userInfo.appendChild(userDOB);
+            userInfo.appendChild(userPhone);
+
+
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+        });
+}
+
+    </script>
+</body>
+</html>

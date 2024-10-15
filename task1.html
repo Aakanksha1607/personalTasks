@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <style>
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5a623, #f093fb);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            background: url('https://i.gifer.com/Itu.gif') no-repeat center ;
+            background-size:contain;
+        }
+        .container {
+            background: #a4d0f1;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            text-align: center;
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: scale(1.05); 
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            background:linear-gradient(5deg, #ae6710, #6bb011 );
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        button {
+            background: #ff7ffb;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        button:hover {
+            background: #e6246f;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .weather-info {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .weather-info.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .weather-info p {
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0c0b0b;
+        }
+
+        .weather-info span {
+            font-weight: bold;
+            color: #087000;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Update</h1>
+        <div id="weather" class="weather-info"> </div>
+        <button id="fetchWeather">Show Weather</button>
+    </div>
+
+    <script>
+        let weatherContainer = document.getElementById('weather')
+        let WeatherButton = document.getElementById('fetchWeather')
+
+        WeatherButton.addEventListener('click', function() {
+        WeatherButton.disabled = true
+            
+            let URL=('https://api.open-meteo.com/v1/forecast?latitude=35.6895&longitude=139.6917&current_weather=true')
+               fetch(URL) .then(response => response.json())
+                .then(data => {
+                    let temperature = data.current_weather.temperature
+                    let windSpeed = data.current_weather.windspeed
+                    let weatherCode = data.current_weather.weathercode
+
+                    weatherContainer.innerHTML = `
+                        <p>Temperature: <span>${temperature}°C</span></p>
+                        <p>Wind Speed: <span>${windSpeed} km/h</span></p>
+                        <p>Weather Code: <span>${weatherCode}</span></p>`
+                    
+                    weatherContainer.classList.add('show');
+                })
+                .catch(error => {
+                    weatherContainer.innerHTML = "<p>Failed to fetch weather data.</p>"
+                    console.error('Error fetching weather data:', error)
+                })
+                
+        })
+    </script>
+</body>
+</html>
